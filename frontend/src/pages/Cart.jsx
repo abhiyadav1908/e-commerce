@@ -11,24 +11,28 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-
-    if (products.length > 0) {
+    console.log('Cart items:', cartItems);
+    console.log('Products:', products);
+    
+    // Convert cartItems object to array format for rendering
+    const updateCartData = () => {
       const tempData = [];
-      for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
-            tempData.push({
-              _id: items,
-              platform: item,
-              quantity: cartItems[items][item]
-            })
-          }
+      for (const itemId in cartItems) {
+        // Only add items with quantity > 0
+        if (cartItems[itemId] > 0) {
+          tempData.push({
+            _id: itemId,
+            quantity: cartItems[itemId]
+          });
         }
       }
+      console.log('Processed cart data:', tempData);
       setCartData(tempData);
-    }
+    };
 
-  }, [cartItems,products])
+    // Update cart data when either cartItems or products change
+    updateCartData();
+  }, [cartItems, products]);
 
   return (
     <div className='border-t pt-14'>
@@ -41,7 +45,10 @@ const Cart = () => {
         {cartData.length > 0 ? (
           cartData.map((item, index) => {
             const productData = products.find((product) => product._id === item._id);
-
+            
+            // Skip rendering if product data is not found
+            if (!productData) return null;
+            
             return (
               <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>
                 <div className='flex items-start gap-6'>
@@ -50,12 +57,22 @@ const Cart = () => {
                     <p className='text-xs sm:text-lg font-medium'>{productData.name}</p>
                     <div className='flex items-center gap-5 mt-2'>
                       <p>{currency}{productData.price}</p>
-                      <p className='px-2 sm:px-3 sm:py-1 border bg-slate-50'>{item.platform}</p>
                     </div>
                   </div>
                 </div>
-                <input onChange={(e) => e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, item.platform, Number(e.target.value))} className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1' type="number" min={1} defaultValue={item.quantity} />
-                <img onClick={() => updateQuantity(item._id, item.platform, 0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt="" />
+                <input 
+                  onChange={(e) => e.target.value === '' || e.target.value === '0' ? null : updateQuantity(item._id, Number(e.target.value))} 
+                  className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1' 
+                  type="number" 
+                  min={1} 
+                  value={item.quantity} 
+                />
+                <img 
+                  onClick={() => updateQuantity(item._id, 0)} 
+                  className='w-4 mr-4 sm:w-5 cursor-pointer' 
+                  src={assets.bin_icon} 
+                  alt="Remove item" 
+                />
               </div>
             )
           })
