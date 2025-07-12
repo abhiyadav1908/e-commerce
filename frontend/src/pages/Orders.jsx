@@ -76,9 +76,8 @@ const Orders = () => {
                 <div>
                   <p className='sm:text-base font-medium'>{item.name}</p>
                   <div className='flex items-center gap-3 mt-1 text-base text-gray-700'>
-                    <p >{currency}{item.price}</p>
+                    <p>{currency}{item.price}</p>
                     <p>Quantity: {item.quantity}</p>
-                    <p>Platform: {item.platform}</p>
                   </div>
                   <p className='mt-1'>Date: <span className='text-gray-400'>{new Date(item.date).toDateString()}</span></p>
                   <p className='mt-1'>Payment: <span className='text-gray-400'>{item.paymentMethod}</span></p>
@@ -86,38 +85,19 @@ const Orders = () => {
               </div>
               
               {/* Status indicator positioned absolutely to center it vertically */}
-              <div className='absolute right-4 top-1/2 transform -translate-y-1/2 hidden md:flex items-center gap-2'>
+              <div className='absolute right-4 top-1/2 pt-10 transform -translate-y-1/2 hidden md:flex items-center gap-2'>
                 <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
                 <p className='text-sm md:text-base text-green-600 font-medium'>{item.status}</p>
               </div>
               
               {/* Mobile status display */}
-              <div className='md:hidden flex items-center gap-2 justify-end mb-2'>
+              <div className='md:hidden flex items-center gap-2 justify-end mt-2'>
                 <p className='min-w-2 h-2 rounded-full bg-green-500'></p>
                 <p className='text-sm text-green-600 font-medium'>{item.status}</p>
               </div>
               
-              <div className='md:w-1/2 flex flex-col gap-2'>
-                <div className='text-sm mt-6'>
-                  <p className='font-medium'>Order ID: <span className='text-gray-600'>{item.orderId || 'N/A'}</span></p>
-                  <div className='mt-2'>
-                    <p className='font-medium'>Game Key:</p>
-                    <div className='flex items-center gap-2 mt-1'>
-                      <code className='bg-gray-100 p-2 rounded text-xs break-all'>{item.gameKey || 'Processing...'}</code>
-                      {item.gameKey && (
-                        <button 
-                          onClick={() => {
-                            navigator.clipboard.writeText(item.gameKey);
-                            toast.success('Game key copied to clipboard!');
-                          }} 
-                          className='text-blue-600 hover:text-blue-800 text-xs'
-                        >
-                          Copy
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+              <div className='text-sm mt-6 mb-4'>
+                <p className='font-medium'>Order ID: <span className='text-gray-600'>{item.orderId || 'N/A'}</span></p>
               </div>
             </div>
           ))
